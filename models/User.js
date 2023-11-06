@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
 
     roleId: { 
         type: mongoose.Schema.Types.ObjectId,
-        required: true,
+        //required: true,
         ref: "Roles" 
     },
 
@@ -13,16 +13,20 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true,
     },
+    authToken: {
+        token: String,
+        expiry: Date,
+    },
     loginPassword: {
         type: String,
         required: true,
-        maxLength: [6, 'Password must be at least 6 characters long']
+        minLength: [6, 'Password must be at least 6 characters long']
     },
     isActive: {
         type: Boolean,
         default: false,
     },
-    firstNamee: {
+    firstName: {
         type: String,
         required: true,
     },
@@ -32,7 +36,7 @@ const userSchema = mongoose.Schema({
     },
     phoneNumber: {
         type: Number,
-        required: true,
+        //required: true,
     },
     profileImage: {
         type: String,
