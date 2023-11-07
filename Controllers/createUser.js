@@ -35,6 +35,8 @@ const createUser = asyncHandler(async (req, res) => {
 
     // Generate a 6-digit authentication code
     const token = generateSixDigitNumber().toString();
+    const hashedToken = await bcrypt.hash(token, 10);
+    console.log(token);
 
     const expirationDate = new Date();
     expirationDate.setHours(expirationDate.getHours() + 24);
@@ -43,14 +45,14 @@ const createUser = asyncHandler(async (req, res) => {
       firstName,
       lastName,
       email,
-      authToken: { token, expiry: expirationDate },
+      authToken: { token: hashedToken, expiry: expirationDate },
       loginPassword: hashedPassword,
     });
 
     await newUser.save();
     res.status(200).json(newUser);
 
-    const loginUrl = `${process.env.CLIENT_URL}/login/${token}`;
+    const loginUrl = `${process.env.CLIENT_URL}/authenticate/${token}`;
 
     const message = `
      <h2>Hello ${email}</h2>
@@ -58,7 +60,7 @@ const createUser = asyncHandler(async (req, res) => {
      <p>This code is valid for only 24 hours.</p>
      <a href=${loginUrl} clicktracking=off>${loginUrl}</a>
      <p>Regards...</p>
-     <p>Powerview Team</p>
+     <p>Power Pulse Team</p>
    `;
     const subject = "Authentication Code";
     const send_to = email;

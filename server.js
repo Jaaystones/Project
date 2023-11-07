@@ -5,7 +5,8 @@ const dotenv = require('dotenv')
 const bodyParser = require('body-parser')
 const { connectDB } = require('./config/dbConfig.js')
 const cookieParser = require('cookie-parser')
-const { createUser } = require('./Controllers.js/createUser.js')
+const { createUser } = require('./Controllers/createUser.js')
+const verifyEmailAndToken  = require('./Controllers/authenticateUser.js');
 
 
 // import mongoose from "mongoose";
@@ -40,6 +41,7 @@ app.use(bodyParser.json());
 // app.use("/api/products", productRouter);
 // app.use("/api/contactus", contactRoute);
 app.use("/api/users", createUser);
+app.use("/api/auth", verifyEmailAndToken)
 
 
 //route
